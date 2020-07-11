@@ -6,3 +6,4 @@ Itch.io Page
 Fix Planet Orbits
 Damage Cooldown
 HUD
+Continuous Shooting for low health
