@@ -161,8 +161,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0.4
-  m_AngularDrag: 0.8
+  m_LinearDrag: 0
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -220,8 +220,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 8200786252945267782, guid: 864fdefce5bb6fd4abecfa7d324e32d0, type: 3}
   moveSpeed: 10
-  steerSpeed: 10
   steerDampTime: 0.1
+  thrustForce: 100
+  steerForce: 100
   bulletSpeed: 20
   bulletEmitters:
   - {fileID: 1130755467175755617}

@@ -1,4 +1,4 @@
-Create more asteroids
+Create more asteroids types & sprites
 More bullet types?
 Main Menu
 Pause Screen
@@ -7,3 +7,5 @@ Fix Planet Orbits
 Damage Cooldown
 HUD
 Continuous Shooting for low health
+Add more planets
+Just rotate AsteroidBelt instead of attaching all of its children with PlanetControllers

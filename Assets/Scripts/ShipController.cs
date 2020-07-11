@@ -8,10 +8,15 @@ using UnityEngine;
 public class ShipController : MonoBehaviour {
 	public GameObject bullet;
 
-	[Header("Configuration")]
+	[Header("High Health")]
 	public float moveSpeed = 10f;
-	public float steerSpeed = 10f;
-	public float steerDampTime = 0.5f; // 500ms?
+	public float steerDampTime = 0.5f;
+
+	[Header("Low Health")]
+	public float thrustForce = 1f;
+	public float steerForce = 50f;
+
+	[Header("Other Configs")]
 	public float bulletSpeed = 100f;
 	public Transform[] bulletEmitters;
 
@@ -20,6 +25,7 @@ public class ShipController : MonoBehaviour {
 	[Range(0f, 1f)]
 	public float switchControlsThreshold = 0.5f;
 
+	private float desiredRotation = 0f;
 	private float steerVelocity = 0f; // For Mathf.SmoothDamp
 
 	private new Rigidbody2D rigidbody;
@@ -29,7 +35,7 @@ public class ShipController : MonoBehaviour {
 	public event Action onDeath;
 
 	private float inputWeight {
-		get => health / maxHealth;
+		get => Mathf.InverseLerp(0.2f, 1f, health / maxHealth);
 	}
 
 	/// <summary>How much physics should play a role in the ship's maneuverability</summary>
@@ -48,16 +54,21 @@ public class ShipController : MonoBehaviour {
 
 		if (input.x != 0f || input.y != 0f) {
 			// Unity uses degrees for transforms; In Mathf.Atan2, 0deg = Right
-			float degrees = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg - 90f;
-			rigidbody.rotation = Mathf.SmoothDampAngle(rigidbody.rotation, degrees, ref steerVelocity, steerDampTime / inputWeight, float.MaxValue * inputWeight);
+			desiredRotation = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg - 90f;
 		}
-		input *= moveSpeed * Time.deltaTime;
-		rigidbody.position += input * inputWeight;
+		rigidbody.rotation = Mathf.SmoothDampAngle(rigidbody.rotation, desiredRotation, ref steerVelocity, steerDampTime / inputWeight, float.MaxValue * inputWeight);
+
+		var movement = input * moveSpeed * inputWeight * Time.deltaTime;
+		// Sin and Cos are switched since Unity rotations face up when zero, in trigonometry, they face right when zero
+		rigidbody.position += movement;
+		// new Vector2(
+		// 	Mathf.Sin(rigidbody.rotation * Mathf.Deg2Rad) * movement.x, -Mathf.Cos(rigidbody.rotation * Mathf.Deg2Rad) * movement.y
+		// );
 
 
 		// Introduce Physics
-		rigidbody.AddRelativeForce(input * physicsWeight);
-		rigidbody.AddTorque((rigidbody.rotation - initRotation) * physicsWeight);
+		rigidbody.AddRelativeForce(Vector2.up * Mathf.Max(0, input.y) * physicsWeight * thrustForce * Time.deltaTime * rigidbody.mass);
+		rigidbody.AddTorque(-input.x * physicsWeight * steerForce * Time.deltaTime * rigidbody.mass);
 	}
 
 	public void Fire() {
