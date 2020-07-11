@@ -10,8 +10,9 @@ public class ShipController : MonoBehaviour {
 	[Header("Configuration")]
 	public float moveSpeed = 10f;
 	public float steerSpeed = 10f;
-	public float bulletSpeed = 100f;
 	public float steerDampTime = 0.5f; // 500ms?
+	public float bulletSpeed = 100f;
+	public Transform[] bulletEmitters;
 
 	public float health = 100f;
 
@@ -42,7 +43,7 @@ public class ShipController : MonoBehaviour {
 
 		if (input.x != 0f || input.y != 0f) {
 			// Unity uses degrees for transforms; In Mathf.Atan2, 0deg = Right
-			float degrees = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg + 90f;
+			float degrees = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg - 90f;
 			rigidbody.rotation = Mathf.SmoothDampAngle(rigidbody.rotation, degrees, ref steerVelocity, steerDampTime, float.PositiveInfinity);
 		}
 		input *= moveSpeed * Time.deltaTime;
@@ -50,8 +51,11 @@ public class ShipController : MonoBehaviour {
 	}
 
 	public void Fire() {
-		var b = Instantiate(bullet, transform.position, transform.rotation);
-		b.GetComponent<Rigidbody2D>().velocity = transform.up * bulletSpeed;
+		foreach (var emitter in bulletEmitters) {
+			var b = Instantiate(bullet, emitter.position, transform.rotation);
+			b.GetComponent<Rigidbody2D>().velocity = transform.up * bulletSpeed;
+			b.GetComponent<Projectile>().sender = gameObject;
+		}
 	}
 
 	public void Damage(float intensity) {
@@ -70,21 +74,25 @@ public class ShipController : MonoBehaviour {
 			onDeath();
 	}
 
-	public virtual void OnTriggerEnter(Collider other) {
+	public virtual void OnTriggerEnter2D(Collider2D other) {
+		Projectile info = other.GetComponent<Projectile>();
+
 		switch (other.tag) {
 			case "Projectile":
-				Projectile info = other.GetComponent<Projectile>();
-
-				if (info == null)
+				if (info == null) {
 					Debug.LogWarning($"Collided with projectile without a Projectile component: {other.name}");
-				else {
+					Destroy(other.gameObject);
+				} else if (info.sender != gameObject || info.lifetime > 1f) {
 					Damage(info.damage);
+					Destroy(other.gameObject);
 				}
 
-				Destroy(other.gameObject);
 				break;
 			case "Celestial":
-				Kill();
+				if (info == null)
+					Kill();
+				else
+					Damage(info.damage);
 				break;
 		}
 	}

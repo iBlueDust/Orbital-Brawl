@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ public class PlayerController : MonoBehaviour {
 
 	private Controls controls;
 	private ShipController ship;
+	// Just ignore the possible security vulnerability here (it's not C/C++ anyway)
+	private Func<Vector2> GetMovementInput;
 
 	void Awake() {
 		controls = new Controls();
@@ -17,8 +20,10 @@ public class PlayerController : MonoBehaviour {
 
 		if (playerId == 0) {
 			controls.Player1.Fire.performed += _ => ship.Fire();
+			GetMovementInput = () => controls.Player1.Movement.ReadValue<Vector2>();
 		} else {
 			controls.Player2.Fire.performed += _ => ship.Fire();
+			GetMovementInput = () => controls.Player2.Movement.ReadValue<Vector2>();
 		}
 
 		ship.onDeath += () => Game.OnPlayerDeath(gameObject, playerId);
@@ -28,10 +33,7 @@ public class PlayerController : MonoBehaviour {
 		if (Game.state != GameState.Running)
 			return;
 
-		float thrust = controls.Player1.Thrust.ReadValue<float>();
-		float steer = controls.Player1.Steer.ReadValue<float>();
-
-		ship.Move(new Vector2(steer, thrust));
+		ship.Move(GetMovementInput());
 	}
 
 	void OnEnable() {

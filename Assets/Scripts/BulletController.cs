@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour {
 	void OnBecameInvisible() {
-		Destroy(this);
+		Destroy(gameObject);
 	}
 }

@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 8200786252945267787}
   - component: {fileID: 8200786252945267780}
   - component: {fileID: 8200786252945267781}
-  - component: {fileID: 5263899439013625206}
   - component: {fileID: 4558549065662016737}
+  - component: {fileID: 879336498909118882}
+  - component: {fileID: 5263899439013625206}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Projectile
@@ -132,18 +133,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &5263899439013625206
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8200786252945267782}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8d4164867faf4b489a14e418c0b4e24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!108 &4558549065662016737
 Light:
   m_ObjectHideFlags: 0
@@ -156,7 +145,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.908, g: 0.9555333, b: 1, a: 1}
-  m_Intensity: 2
+  m_Intensity: 4
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -205,3 +194,28 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &879336498909118882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8200786252945267782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b2f24f39baeef74aadd12b034a9ca99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 2.5
+--- !u!114 &5263899439013625206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8200786252945267782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8d4164867faf4b489a14e418c0b4e24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

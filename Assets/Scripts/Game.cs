@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum GameState {
 	Running,
@@ -12,32 +13,30 @@ public enum GameState {
 }
 
 public class Game : MonoBehaviour {
+	private static GameState _state = GameState.BeforeStart;
 	public static GameState state {
-		get => state;
+		get => _state;
 		set {
-			state = value;
+			_state = value;
 			if (onStateChange != null)
-				onStateChange(value);
+				onStateChange(_state);
 		}
 	}
 
 	public static event Action<GameState> onStateChange;
 
-	private Controls controls;
-
 	void Start() {
 		if (Debug.isDebugBuild)
 			onStateChange += state => Debug.Log("GameState change: " + state);
 
-		controls = new Controls();
-		controls.Enable();
-
-		controls.Player1.Fire.performed += _ => StartGame();
-		controls.Player2.Fire.performed += _ => StartGame();
+		StartCoroutine(AwaitFirstInput());
 	}
 
-	void StartGame() {
-		controls.Disable();
+	IEnumerator AwaitFirstInput() {
+		while (!Keyboard.current.anyKey.isPressed) {
+			yield return null;
+		}
+
 		state = GameState.Running;
 	}
 
