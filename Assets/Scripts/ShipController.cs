@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,17 +13,17 @@ public class ShipController : MonoBehaviour {
 	public float bulletSpeed = 100f;
 	public float steerDampTime = 0.5f; // 500ms?
 
+	public float health = 100f;
+
 	private float steerVelocity = 0f; // For Mathf.SmoothDamp
 
-	private Rigidbody2D rigidbody;
+	private new Rigidbody2D rigidbody;
+
+	[HideInInspector]
+	public event Action onDeath;
 
 	void Awake() {
 		rigidbody = GetComponent<Rigidbody2D>();
-	}
-
-
-	void FixedUpdate() {
-
 	}
 
 	public void Thrust(float input) {
@@ -51,5 +52,40 @@ public class ShipController : MonoBehaviour {
 	public void Fire() {
 		var b = Instantiate(bullet, transform.position, transform.rotation);
 		b.GetComponent<Rigidbody2D>().velocity = transform.up * bulletSpeed;
+	}
+
+	public void Damage(float intensity) {
+		health -= intensity;
+
+		if (health <= 0f)
+			Kill();
+	}
+
+	public void Kill() {
+		health = 0f;
+		gameObject.SetActive(false);
+		Debug.Log(name + " died");
+
+		if (onDeath != null)
+			onDeath();
+	}
+
+	public virtual void OnTriggerEnter(Collider other) {
+		switch (other.tag) {
+			case "Projectile":
+				Projectile info = other.GetComponent<Projectile>();
+
+				if (info == null)
+					Debug.LogWarning($"Collided with projectile without a Projectile component: {other.name}");
+				else {
+					Damage(info.damage);
+				}
+
+				Destroy(other.gameObject);
+				break;
+			case "Celestial":
+				Kill();
+				break;
+		}
 	}
 }

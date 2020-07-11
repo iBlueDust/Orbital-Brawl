@@ -19,11 +19,15 @@ public class PlayerController : MonoBehaviour {
 			controls.Player1.Fire.performed += _ => ship.Fire();
 		} else {
 			controls.Player2.Fire.performed += _ => ship.Fire();
-
 		}
+
+		ship.onDeath += () => Game.OnPlayerDeath(gameObject, playerId);
 	}
 
 	void Update() {
+		if (Game.state != GameState.Running)
+			return;
+
 		float thrust = controls.Player1.Thrust.ReadValue<float>();
 		float steer = controls.Player1.Steer.ReadValue<float>();
 

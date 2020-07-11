@@ -11,7 +11,7 @@ public class PlanetController : MonoBehaviour {
 	private float orbitAngle;
 	private float orbitRadius;
 
-	void Awake() {
+	void Start() {
 		var orbitRelativePosition = transform.position - orbitCenter.position;
 
 		orbitRadius = orbitRelativePosition.magnitude;
@@ -19,6 +19,9 @@ public class PlanetController : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+		if (Game.state != GameState.Running)
+			return;
+
 		orbitAngle += orbitSpeed * Time.deltaTime;
 
 		var orbitRelativePosition = new Vector3(
