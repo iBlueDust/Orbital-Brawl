@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 using PlayerID = System.UInt16;
 
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviour {
 	private Controls controls;
 	private ShipController ship;
 	// Just ignore the possible security vulnerability here (it's not C/C++ anyway)
+	private Func<bool> GetFireInput;
 	private Func<Vector2> GetMovementInput;
 
 	void Awake() {

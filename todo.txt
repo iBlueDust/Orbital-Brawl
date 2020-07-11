@@ -1,0 +1,8 @@
+Create more asteroids
+More bullet types?
+Main Menu
+Pause Screen
+Itch.io Page
+Fix Planet Orbits
+Damage Cooldown
+HUD

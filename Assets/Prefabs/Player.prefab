@@ -74,6 +74,7 @@ GameObject:
   - component: {fileID: 5302300293825832678}
   - component: {fileID: 8972652296579028770}
   - component: {fileID: 8972652296579028768}
+  - component: {fileID: 5543788669941970969}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -225,7 +226,9 @@ MonoBehaviour:
   bulletEmitters:
   - {fileID: 1130755467175755617}
   - {fileID: 8505337122946949435}
+  maxHealth: 100
   health: 100
+  switchControlsThreshold: 0.5
 --- !u!114 &8972652296579028768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,3 +242,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerId: 0
+--- !u!114 &5543788669941970969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8972652296579028773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7830a57ea58c0e4ea03aefeab7f7e3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mass: 1
+  gravityWeight: 1

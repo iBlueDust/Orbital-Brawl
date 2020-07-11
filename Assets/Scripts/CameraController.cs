@@ -48,12 +48,11 @@ public class CameraController : MonoBehaviour {
 			numTargets++;
 		}
 
-		if (numTargets > 0)
+		if (numTargets > 0) {
 			averagePos /= numTargets;
-
-		averagePos.z = transform.position.z;
-
-		desiredPosition = averagePos;
+			averagePos.z = transform.position.z;
+			desiredPosition = averagePos;
+		}
 	}
 
 

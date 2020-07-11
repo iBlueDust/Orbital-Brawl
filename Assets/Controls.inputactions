@@ -11,14 +11,14 @@
                     "id": "fd05256c-0cc4-4cf8-b791-b754ccb2c9f8",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
+                    "interactions": "Press,Hold"
                 },
                 {
                     "name": "Movement",
                     "type": "Value",
                     "id": "bb5cdfbc-8e7a-45c9-a46e-d187cea86f15",
                     "expectedControlType": "Vector2",
-                    "processors": "",
+                    "processors": "NormalizeVector2",
                     "interactions": ""
                 }
             ],
@@ -27,7 +27,7 @@
                     "name": "",
                     "id": "fd32285f-3885-4724-b0f3-3b8f9a2943b7",
                     "path": "<Keyboard>/space",
-                    "interactions": "Press",
+                    "interactions": "Press,Hold",
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Fire",
@@ -38,7 +38,7 @@
                     "name": "",
                     "id": "025749bf-5c6d-495b-976a-861c4bd21caf",
                     "path": "<Keyboard>/c",
-                    "interactions": "Press",
+                    "interactions": "Press,Hold",
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Fire",
@@ -112,14 +112,14 @@
                     "id": "7a6df453-9c78-4149-b55a-886806657b72",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press"
+                    "interactions": "Press,Hold"
                 },
                 {
                     "name": "Movement",
                     "type": "Value",
                     "id": "1fb5d8e3-9643-45f7-b396-1aa950df5781",
                     "expectedControlType": "Vector2",
-                    "processors": "",
+                    "processors": "NormalizeVector2",
                     "interactions": ""
                 }
             ],
@@ -128,7 +128,7 @@
                     "name": "",
                     "id": "a851caf7-97fe-41e6-8e04-25239bf935f7",
                     "path": "<Keyboard>/ctrl",
-                    "interactions": "Press",
+                    "interactions": "Press,Hold",
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Fire",
@@ -139,7 +139,7 @@
                     "name": "",
                     "id": "530153d3-1e15-4a76-a0a3-fde24baff9e3",
                     "path": "<Keyboard>/n",
-                    "interactions": "Press",
+                    "interactions": "Press,Hold",
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Fire",
@@ -150,7 +150,7 @@
                     "name": "",
                     "id": "1ffeaa31-7440-4b3c-9f8f-a7798eaecc35",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "Press",
+                    "interactions": "Press,Hold",
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Fire",

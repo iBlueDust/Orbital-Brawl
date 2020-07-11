@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(GravityBody))]
 public class ShipController : MonoBehaviour {
 	public GameObject bullet;
 
@@ -14,40 +15,49 @@ public class ShipController : MonoBehaviour {
 	public float bulletSpeed = 100f;
 	public Transform[] bulletEmitters;
 
+	public float maxHealth = 100f;
 	public float health = 100f;
+	[Range(0f, 1f)]
+	public float switchControlsThreshold = 0.5f;
 
 	private float steerVelocity = 0f; // For Mathf.SmoothDamp
 
 	private new Rigidbody2D rigidbody;
+	private GravityBody gravityBody;
 
 	[HideInInspector]
 	public event Action onDeath;
 
+	private float inputWeight {
+		get => health / maxHealth;
+	}
+
+	/// <summary>How much physics should play a role in the ship's maneuverability</summary>
+	private float physicsWeight {
+		get => 1 - inputWeight;
+	}
+
 	void Awake() {
 		rigidbody = GetComponent<Rigidbody2D>();
+		gravityBody = GetComponent<GravityBody>();
 	}
 
-	public void Thrust(float input) {
-		// rigidbody.AddRelativeForce(Vector2.up * Time.deltaTime * moveSpeed);
-		rigidbody.velocity = transform.up * moveSpeed * input;
-	}
-
-	public void Steer(float input) {
-		// rigidbody.AddTorque(input * Time.deltaTime * steerSpeed);
-		rigidbody.angularVelocity = -input * steerSpeed;
-	}
-
+	// input should already be normalized (since Controls already normalizes it)
 	public void Move(Vector2 input) {
-		if (input.sqrMagnitude > 1)
-			input.Normalize();
+		float initRotation = rigidbody.rotation;
 
 		if (input.x != 0f || input.y != 0f) {
 			// Unity uses degrees for transforms; In Mathf.Atan2, 0deg = Right
 			float degrees = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg - 90f;
-			rigidbody.rotation = Mathf.SmoothDampAngle(rigidbody.rotation, degrees, ref steerVelocity, steerDampTime, float.PositiveInfinity);
+			rigidbody.rotation = Mathf.SmoothDampAngle(rigidbody.rotation, degrees, ref steerVelocity, steerDampTime / inputWeight, float.MaxValue * inputWeight);
 		}
 		input *= moveSpeed * Time.deltaTime;
-		rigidbody.position += input;
+		rigidbody.position += input * inputWeight;
+
+
+		// Introduce Physics
+		rigidbody.AddRelativeForce(input * physicsWeight);
+		rigidbody.AddTorque((rigidbody.rotation - initRotation) * physicsWeight);
 	}
 
 	public void Fire() {
@@ -63,6 +73,8 @@ public class ShipController : MonoBehaviour {
 
 		if (health <= 0f)
 			Kill();
+
+		gravityBody.gravityWeight = physicsWeight;
 	}
 
 	public void Kill() {

@@ -150,6 +150,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 25
-  maxLifetime: 60
+  maxLifetime: Infinity
   sender: {fileID: 0}
   lifetime: 0
