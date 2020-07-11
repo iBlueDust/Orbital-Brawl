@@ -27,8 +27,6 @@ public class PlayerController : MonoBehaviour {
 		float thrust = controls.Player1.Thrust.ReadValue<float>();
 		float steer = controls.Player1.Steer.ReadValue<float>();
 
-		Debug.Log($"Thrust: {thrust}, Steer: {steer}");
-
 		ship.Move(new Vector2(steer, thrust));
 	}
 
