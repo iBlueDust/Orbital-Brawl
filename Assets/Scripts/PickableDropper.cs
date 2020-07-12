@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 // Drops "pickables" all over the scene, such as heal canisters
 public class PickableDropper : MonoBehaviour {
@@ -11,20 +13,41 @@ public class PickableDropper : MonoBehaviour {
 	public float timeBetweenDrops = 10f;
 	public float timeBetweenDropsDeviation = 5f;
 
-	void Start() {
-		StartCoroutine(DropHealCannisters());
+	private Action<GameState> onGameStateChange;
+
+	void Awake() {
+		onGameStateChange = _ => {
+			if (Game.state == GameState.Running)
+				dropHealCanisters = StartCoroutine(DropHealCanisters());
+			else {
+				StopCoroutine(dropHealCanisters);
+				dropHealCanisters = null;
+			}
+		};
+		Game.onStateChange += onGameStateChange;
 	}
 
-	private IEnumerator DropHealCannisters() {
+	void OnEnable() {
+		onGameStateChange(Game.state);
+	}
+
+	void OnDisable() {
+		StopCoroutine(dropHealCanisters);
+		dropHealCanisters = null;
+	}
+
+	void OnDestroy() {
+		Game.onStateChange -= onGameStateChange;
+	}
+
+	private Coroutine dropHealCanisters = null;
+	private IEnumerator DropHealCanisters() {
+
 		// Max of camera view width and height
 		var halfCamHeight = Camera.main.orthographicSize;
 		var halfCamWidth = Camera.main.orthographicSize / Camera.main.aspect;
 
-		while (true) {
-			while (Game.state != GameState.Running) {
-				yield return null;
-			}
-
+		while (Game.state == GameState.Running) {
 			yield return new WaitForSeconds(Random.Range(timeBetweenDrops - timeBetweenDropsDeviation, timeBetweenDrops + timeBetweenDropsDeviation));
 
 			// Instantiate canister just outside of camera bounds
@@ -56,7 +79,8 @@ public class PickableDropper : MonoBehaviour {
 				position
 			);
 			canister.GetComponent<HealCanister>().SetVelocity(Vector2.Perpendicular(radiusVector * orbitDirection) * velocity);
-
 		}
+
+		dropHealCanisters = null;
 	}
 }

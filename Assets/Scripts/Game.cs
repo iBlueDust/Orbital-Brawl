@@ -43,4 +43,6 @@ public class Game : MonoBehaviour {
 	public static void OnPlayerDeath(GameObject player, int playerId) {
 		state = GameState.AfterEnd;
 	}
+
+
 }

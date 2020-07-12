@@ -2,6 +2,6 @@ Main Menu
 Pause Screen
 Itch.io Page
 HUD
-Controller controls
 Continuous Shooting for low health
 Sound
+Out of Bounds barrier
