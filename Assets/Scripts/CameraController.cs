@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour {
 	public float dampTime = 0.2f;
 	public float screenEdgeBuffer = 4f;
 	public float minSize = 6.5f;
-	[HideInInspector] public Transform[] targets;
+	[HideInInspector] public LinkedList<GameObject> targets;
 
 
 	private new Camera camera;
@@ -19,7 +19,7 @@ public class CameraController : MonoBehaviour {
 
 	private void Awake() {
 		camera = GetComponent<Camera>();
-		targets = GameObject.FindGameObjectsWithTag("Player").Select(g => g.transform).ToArray();
+		targets = new LinkedList<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
 	}
 
 
@@ -40,11 +40,15 @@ public class CameraController : MonoBehaviour {
 		Vector3 averagePos = new Vector3();
 		int numTargets = 0;
 
-		for (int i = 0; i < targets.Length; i++) {
-			if (!targets[i].gameObject.activeSelf)
-				continue;
+		for (var node = targets.First; node != null; node = node.Next) {
+			var target = node.Value;
 
-			averagePos += targets[i].position;
+			if (target == null) {
+				targets.Remove(node);
+				continue;
+			}
+
+			averagePos += target.transform.position;
 			numTargets++;
 		}
 
@@ -67,11 +71,15 @@ public class CameraController : MonoBehaviour {
 
 		float size = 0f;
 
-		for (int i = 0; i < targets.Length; i++) {
-			if (!targets[i].gameObject.activeSelf)
-				continue;
+		for (var node = targets.First; node != null; node = node.Next) {
+			var target = node.Value;
 
-			Vector3 targetLocalPos = transform.InverseTransformPoint(targets[i].position);
+			if (target == null) {
+				targets.Remove(node);
+				continue;
+			}
+
+			Vector3 targetLocalPos = transform.InverseTransformPoint(target.transform.position);
 
 			Vector3 desiredPosToTarget = targetLocalPos - desiredLocalPos;
 

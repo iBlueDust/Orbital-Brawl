@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class AsteroidBelt : MonoBehaviour {
@@ -15,15 +16,19 @@ public class AsteroidBelt : MonoBehaviour {
 	private static readonly uint BATCH_SIZE = 100;
 	private static readonly uint MAX_SAMPLES = 30;
 
+	private float innerRadius;
+	private float outerRadius;
+
 	void Start() {
+		innerRadius = (transform.position - center.position).magnitude;
+		outerRadius = innerRadius + spawnRangeWidth;
+
 		StartCoroutine(SpawnAsteroids());
 	}
 
 	// Poisson disc sampling
 	private IEnumerator SpawnAsteroids() {
-		float innerRadius = (transform.position - center.position).magnitude;
 		float innerCircumference = Mathf.PI * 2 * innerRadius;
-		float outerRadius = innerRadius + spawnRangeWidth;
 
 		// [sector, track]
 		int sectorCount = Mathf.CeilToInt(innerCircumference / minDistance);

@@ -5,8 +5,10 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(GravityBody))]
+[RequireComponent(typeof(Animator))]
 public class ShipController : MonoBehaviour {
 	public GameObject bullet;
+	public GameObject deathParticles;
 
 	[Header("High Health")]
 	public float moveSpeed = 10f;
@@ -19,17 +21,18 @@ public class ShipController : MonoBehaviour {
 	[Header("Other Configs")]
 	public float bulletSpeed = 100f;
 	public Transform[] bulletEmitters;
+	public float recoilForce = 250f;
 
 	public float maxHealth = 100f;
 	public float health = 100f;
-	[Range(0f, 1f)]
-	public float switchControlsThreshold = 0.5f;
+	public float damageCooldown = 1f;
 
 	private float desiredRotation = 0f;
 	private float steerVelocity = 0f; // For Mathf.SmoothDamp
 
 	private new Rigidbody2D rigidbody;
 	private GravityBody gravityBody;
+	private Animator animator;
 
 	[HideInInspector]
 	public event Action onDeath;
@@ -46,6 +49,7 @@ public class ShipController : MonoBehaviour {
 	void Awake() {
 		rigidbody = GetComponent<Rigidbody2D>();
 		gravityBody = GetComponent<GravityBody>();
+		animator = GetComponent<Animator>();
 	}
 
 	// input should already be normalized (since Controls already normalizes it)
@@ -59,12 +63,9 @@ public class ShipController : MonoBehaviour {
 		rigidbody.rotation = Mathf.SmoothDampAngle(rigidbody.rotation, desiredRotation, ref steerVelocity, steerDampTime / inputWeight, float.MaxValue * inputWeight, Time.deltaTime);
 
 		var movement = input * moveSpeed * inputWeight * Time.deltaTime;
-		// Sin and Cos are switched since Unity rotations face up when zero, in trigonometry, they face right when zero
 		rigidbody.position += movement;
-		// new Vector2(
-		// 	Mathf.Sin(rigidbody.rotation * Mathf.Deg2Rad) * movement.x, -Mathf.Cos(rigidbody.rotation * Mathf.Deg2Rad) * movement.y
-		// );
-
+		rigidbody.drag = inputWeight;
+		rigidbody.angularDrag = inputWeight;
 
 		// Introduce Physics
 		rigidbody.AddRelativeForce(Vector2.up * Mathf.Max(0, input.y) * physicsWeight * thrustForce * Time.deltaTime * rigidbody.mass);
@@ -77,45 +78,79 @@ public class ShipController : MonoBehaviour {
 			b.GetComponent<Rigidbody2D>().velocity = transform.up * bulletSpeed;
 			b.GetComponent<Projectile>().sender = gameObject;
 		}
+
+		// Recoil
+		rigidbody.AddRelativeForce(Vector2.down * bulletEmitters.Length * recoilForce * physicsWeight, ForceMode2D.Impulse);
 	}
 
-	public void Damage(float intensity) {
+	private float lastDamageTime = float.NegativeInfinity;
+	public bool Damage(float intensity) {
+		if (lastDamageTime + damageCooldown > Time.time)
+			return false;
+
+		lastDamageTime = Time.timeSinceLevelLoad;
 		health -= intensity;
 
 		if (health <= 0f)
 			Kill();
 
 		gravityBody.gravityWeight = physicsWeight;
+		animator.SetTrigger("Damage");
+		return true;
 	}
 
 	public void Kill() {
 		health = 0f;
 		gameObject.SetActive(false);
+		Instantiate(deathParticles, transform.position, Quaternion.identity);
 		Debug.Log(name + " died");
 
 		if (onDeath != null)
 			onDeath();
 	}
 
-	public virtual void OnTriggerEnter2D(Collider2D other) {
-		Projectile info = other.GetComponent<Projectile>();
+	/// Position is in global space
+	public void Knockback(Projectile bullet) {
+		Rigidbody2D bulletRB = bullet.GetComponent<Rigidbody2D>();
 
+		// This is technically 2*energy but whatever. The force on impact is supposed to be E / d anyway. Let bullet.mass handle that
+		var energy = bulletRB.velocity.normalized * bulletRB.velocity.sqrMagnitude * bullet.mass;
+		rigidbody.AddForceAtPosition(energy, bulletRB.position);
+	}
+
+	public void Heal(float healPower) {
+		health = Mathf.Min(health + healPower, maxHealth);
+		animator.SetTrigger("Heal");
+	}
+
+	public virtual void OnTriggerEnter2D(Collider2D other) {
 		switch (other.tag) {
 			case "Projectile":
-				if (info == null) {
+				Projectile projectile = other.GetComponent<Projectile>();
+				if (projectile == null) {
 					Debug.LogWarning($"Collided with projectile without a Projectile component: {other.name}");
 					Destroy(other.gameObject);
-				} else if (info.sender != gameObject || info.lifetime > 1f) {
-					Damage(info.damage);
+				} else if (projectile.sender != gameObject || projectile.lifetime > 1f) {
+					Damage(projectile.damage);
+					Knockback(projectile);
 					Destroy(other.gameObject);
 				}
 
 				break;
 			case "Celestial":
-				if (info == null)
+				// Asteroids are celestial but do not one-hit
+				var asteroidInfo = other.GetComponent<Projectile>();
+				if (asteroidInfo == null)
 					Kill();
 				else
-					Damage(info.damage);
+					Damage(asteroidInfo.damage);
+				break;
+			case "Pickable":
+				var info = other.GetComponent<HealCanister>();
+				if (info != null)
+					Heal(info.healPower);
+
+				Destroy(other.gameObject);
 				break;
 		}
 	}

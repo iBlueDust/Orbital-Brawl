@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour {
 			GetMovementInput = () => controls.Player2.Movement.ReadValue<Vector2>();
 		}
 
-		ship.onDeath += () => Game.OnPlayerDeath(gameObject, playerId);
+		ship.onDeath += () => OnDeath();
 	}
 
 	void Update() {
@@ -36,6 +36,10 @@ public class PlayerController : MonoBehaviour {
 			return;
 
 		ship.Move(GetMovementInput());
+	}
+
+	private void OnDeath() {
+		Game.OnPlayerDeath(gameObject, playerId);
 	}
 
 	void OnEnable() {

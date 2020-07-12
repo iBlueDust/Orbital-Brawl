@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,6 +25,12 @@ public class GravityBody : MonoBehaviour {
 	public void AddVelocity(Vector2 acceleration, float time) {
 		if (rigidbody.bodyType != RigidbodyType2D.Static)
 			rigidbody.velocity += acceleration * time * gravityWeight;
+	}
+
+	public event Action onDestroy;
+	void OnDestroy() {
+		if (onDestroy != null)
+			onDestroy();
 	}
 
 }
