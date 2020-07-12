@@ -59,8 +59,10 @@ public class Game : MonoBehaviour {
 		if (Debug.isDebugBuild)
 			onStateChange += state => Debug.Log("GameState change: " + state);
 
-		var defaultScale = Time.timeScale;
-		onStateChange += state => Time.timeScale = state == GameState.Running ? defaultScale : 0f;
+		// This might be a nightmare in the future but
+		// If you wanna change the default timeScale, go here :)))
+		Time.timeScale = 0f;
+		onStateChange += state => Time.timeScale = state == GameState.Running ? 1f : 0f;
 
 		StartCoroutine(AwaitFirstInput());
 	}

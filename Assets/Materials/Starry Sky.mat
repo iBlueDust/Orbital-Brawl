@@ -44,6 +44,7 @@ Material:
     - Vector1_F125FAE5: -0.1
     - _EnableExternalAlpha: 0
     m_Colors:
+    - Color_C0D83086: {r: 0.11109, g: 0.11109, b: 0.21, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

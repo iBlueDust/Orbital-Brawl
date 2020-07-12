@@ -19,7 +19,7 @@ public class PickableDropper : MonoBehaviour {
 		onGameStateChange = _ => {
 			if (Game.state == GameState.Running)
 				dropHealCanisters = StartCoroutine(DropHealCanisters());
-			else {
+			else if (dropHealCanisters != null) {
 				StopCoroutine(dropHealCanisters);
 				dropHealCanisters = null;
 			}
@@ -35,8 +35,10 @@ public class PickableDropper : MonoBehaviour {
 	}
 
 	void OnDisable() {
-		StopCoroutine(dropHealCanisters);
-		dropHealCanisters = null;
+		if (dropHealCanisters != null) {
+			StopCoroutine(dropHealCanisters);
+			dropHealCanisters = null;
+		}
 	}
 
 	void OnDestroy() {

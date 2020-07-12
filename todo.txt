@@ -1,8 +1,6 @@
-Main Menu
-Pause Screen
 Itch.io Page
-Continuous Shooting for low health
-Thrust particles?
-Out of Bounds barrier
 
+Main Menu (Cancelled)
+Continuous Shooting for low health (Cancelled)
+Out of Bounds barrier (Cancelled)
 HUD (Cancelled)
