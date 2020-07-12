@@ -123,4 +123,10 @@ public class AsteroidBelt : MonoBehaviour {
 			Mathf.Sin(angle) * radius
 		);
 	}
+
+	void OnDrawGizmos() {
+		Gizmos.color = Color.green;
+		Gizmos.DrawWireSphere(center.position, innerRadius);
+		Gizmos.DrawWireSphere(center.position, outerRadius);
+	}
 }

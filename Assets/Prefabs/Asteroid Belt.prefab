@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2668936964731426800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2668936964731426807}
+  - component: {fileID: 2668936964731426806}
+  m_Layer: 0
+  m_Name: Asteroid Belt
+  m_TagString: Celestial
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2668936964731426807
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2668936964731426800}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 35, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2668936964731426806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2668936964731426800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcdf403cae7b9e244869342066c95b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnCount: 50
+  minDistance: 0.5
+  minSize: 0.125
+  maxSize: 3
+  minRotateSpeed: 0.075
+  maxRotateSpeed: 0.5
+  minOrbitSpeed: 0.005
+  maxOrbitSpeed: 0.0075
+  maxDamage: 25
+  maxMass: 300
+  spawnRangeWidth: 20
+  center: {fileID: 0}
+  asteroids:
+  - {fileID: 9032756641298490715, guid: 45409e840dd82df4fa55ac356ca26dc4, type: 3}
+  - {fileID: 5178995511827872502, guid: 418cd18edded04e44bfbd7dcdf97bb30, type: 3}
+  - {fileID: 4317366257111456860, guid: a0e0005b4c7918744a4df6c179fb5831, type: 3}
+  - {fileID: 565366633034535411, guid: 44fb46dac0c00af44b0f8190722584f3, type: 3}

@@ -22,7 +22,7 @@ public class PlanetController : MonoBehaviour {
 		if (Game.state != GameState.Running)
 			return;
 
-		orbitAngle += orbitSpeed * Time.deltaTime;
+		orbitAngle += orbitSpeed * Mathf.Deg2Rad * Time.deltaTime;
 
 		var orbitRelativePosition = new Vector3(
 			Mathf.Cos(orbitAngle) * orbitRadius,
