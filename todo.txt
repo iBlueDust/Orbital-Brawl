@@ -1,7 +1,8 @@
 Main Menu
 Pause Screen
 Itch.io Page
-HUD
 Continuous Shooting for low health
-Sound
+Thrust particles?
 Out of Bounds barrier
+
+HUD (Cancelled)

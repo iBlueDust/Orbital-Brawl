@@ -20,14 +20,20 @@ public class PlayerController : MonoBehaviour {
 		controls = new Controls();
 		ship = GetComponent<ShipController>();
 
+		Action<InputAction.CallbackContext> fireHandler = _ => {
+			if (Game.state == GameState.Running)
+				ship.Fire();
+		};
+
 		if (playerId == 0) {
-			controls.Player1.Fire.performed += _ => ship.Fire();
+			controls.Player1.Fire.performed += fireHandler;
 			GetMovementInput = () => controls.Player1.Movement.ReadValue<Vector2>();
 		} else {
-			controls.Player2.Fire.performed += _ => ship.Fire();
+			controls.Player2.Fire.performed += fireHandler;
 			GetMovementInput = () => controls.Player2.Movement.ReadValue<Vector2>();
 		}
 
+		// No need to unregister this since controller will be trashed alongside this class
 		ship.onDeath += () => OnDeath();
 	}
 
@@ -39,7 +45,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void OnDeath() {
-		Game.OnPlayerDeath(gameObject, playerId);
+		Game.instance.OnPlayerDeath(gameObject, playerId);
 	}
 
 	void OnEnable() {

@@ -28,7 +28,10 @@ public class BackgroundMusic : MonoBehaviour {
 				}
 			}
 		};
-		Game.onStateChange += onGameStateChange;
+	}
+
+	void Start() {
+		Game.instance.onStateChange += onGameStateChange;
 	}
 
 	void OnEnable() {
@@ -36,12 +39,14 @@ public class BackgroundMusic : MonoBehaviour {
 	}
 
 	void OnDisable() {
-		StopCoroutine(playGameplayMusic);
-		playGameplayMusic = null;
+		if (playGameplayMusic != null) {
+			StopCoroutine(playGameplayMusic);
+			playGameplayMusic = null;
+		}
 	}
 
 	void OnDestroy() {
-		Game.onStateChange -= onGameStateChange;
+		Game.instance.onStateChange -= onGameStateChange;
 	}
 
 	private Coroutine playGameplayMusic = null;

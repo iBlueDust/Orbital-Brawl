@@ -24,7 +24,10 @@ public class PickableDropper : MonoBehaviour {
 				dropHealCanisters = null;
 			}
 		};
-		Game.onStateChange += onGameStateChange;
+	}
+
+	void Start() {
+		Game.instance.onStateChange += onGameStateChange;
 	}
 
 	void OnEnable() {
@@ -37,7 +40,7 @@ public class PickableDropper : MonoBehaviour {
 	}
 
 	void OnDestroy() {
-		Game.onStateChange -= onGameStateChange;
+		Game.instance.onStateChange -= onGameStateChange;
 	}
 
 	private Coroutine dropHealCanisters = null;
