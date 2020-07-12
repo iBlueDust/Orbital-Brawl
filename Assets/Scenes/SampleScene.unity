@@ -618,10 +618,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnCount: 50
   minDistance: 0.5
+  minSize: 0.125
+  maxSize: 3
+  minRotateSpeed: 0.075
+  maxRotateSpeed: 0.5
+  minOrbitSpeed: 0.005
+  maxOrbitSpeed: 0.0075
+  maxDamage: 25
+  maxMass: 300
   spawnRangeWidth: 20
   center: {fileID: 1387065829}
   asteroids:
   - {fileID: 9032756641298490715, guid: 45409e840dd82df4fa55ac356ca26dc4, type: 3}
+  - {fileID: 5178995511827872502, guid: 418cd18edded04e44bfbd7dcdf97bb30, type: 3}
+  - {fileID: 4317366257111456860, guid: a0e0005b4c7918744a4df6c179fb5831, type: 3}
+  - {fileID: 565366633034535411, guid: 44fb46dac0c00af44b0f8190722584f3, type: 3}
 --- !u!1 &1119045328
 GameObject:
   m_ObjectHideFlags: 0
@@ -885,8 +896,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7830a57ea58c0e4ea03aefeab7f7e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mass: 100000
+  overrideMass: 1
+  mass: 1e+9
   gravityWeight: 1
+  gravityOffset: 0
 --- !u!1 &1502446127
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,7 +957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a2637e1a7cbc4469f69b83cf5b2a08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gConstant: 0.001
+  gConstant: 0.00001
   timeStep: 1
   bodies: []
 --- !u!114 &1502446131

@@ -21,7 +21,8 @@ public class ShipController : MonoBehaviour {
 	[Header("Other Configs")]
 	public float bulletSpeed = 100f;
 	public Transform[] bulletEmitters;
-	public float recoilForce = 250f;
+	public float recoilForce = 2f;
+	public float maxGravityResistance = 100f;
 
 	public float maxHealth = 100f;
 	public float health = 100f;
@@ -34,11 +35,13 @@ public class ShipController : MonoBehaviour {
 	private GravityBody gravityBody;
 	private Animator animator;
 
-	[HideInInspector]
-	public event Action onDeath;
+	// < current health, change in health >
+	public event Action<float, float> onHealthChange = delegate { };
+	public event Action onDeath = delegate { };
 
 	private float inputWeight {
-		get => Mathf.InverseLerp(0.2f, 1f, health / maxHealth);
+		// get => Mathf.InverseLerp(0.2f, 1f, health / maxHealth);
+		get => health / maxHealth;
 	}
 
 	/// <summary>How much physics should play a role in the ship's maneuverability</summary>
@@ -50,6 +53,9 @@ public class ShipController : MonoBehaviour {
 		rigidbody = GetComponent<Rigidbody2D>();
 		gravityBody = GetComponent<GravityBody>();
 		animator = GetComponent<Animator>();
+
+		gravityBody.gravityOffset = maxGravityResistance * inputWeight;
+		onHealthChange += (_, __) => gravityBody.gravityOffset = maxGravityResistance * inputWeight;
 	}
 
 	// input should already be normalized (since Controls already normalizes it)
@@ -94,7 +100,7 @@ public class ShipController : MonoBehaviour {
 		if (health <= 0f)
 			Kill();
 
-		gravityBody.gravityWeight = physicsWeight;
+		onHealthChange(health, intensity);
 		animator.SetTrigger("Damage");
 		return true;
 	}
@@ -120,6 +126,7 @@ public class ShipController : MonoBehaviour {
 
 	public void Heal(float healPower) {
 		health = Mathf.Min(health + healPower, maxHealth);
+		onHealthChange(health, healPower);
 		animator.SetTrigger("Heal");
 	}
 

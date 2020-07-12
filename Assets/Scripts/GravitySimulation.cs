@@ -34,6 +34,12 @@ public class GravitySimulation : MonoBehaviour {
 		return bodies.Remove(body);
 	}
 
+	public float VelocityToOrbit(Vector3 center, float centerMass, Vector3 position) {
+		float radius = (position - center).magnitude;
+		int orbitDirection = Random.Range(0, 2) * 2 - 1; // -1 or 1
+		return Mathf.Sqrt(centerMass * gConstant / radius); // Sqrt(G*m/r)
+	}
+
 	// 'tis an O(n^2) operation
 	// I had thought of an optimization that was still O(n^2) after I thought about it more
 	void FixedUpdate() {

@@ -50,8 +50,11 @@ public class PickableDropper : MonoBehaviour {
 			// Give canister velocity to orbit the sun
 			Vector2 radiusVector = orbitCenter.transform.InverseTransformPoint(position);
 			int orbitDirection = Random.Range(0, 2) * 2 - 1; // -1 or 1
-			var sunMass = orbitCenter.GetComponent<Rigidbody2D>().mass;
-			var velocity = Mathf.Sqrt(sunMass * GravitySimulation.instance.gConstant / radiusVector.magnitude); // Sqrt(G*m/r)
+			float velocity = GravitySimulation.instance.VelocityToOrbit(
+				orbitCenter.transform.position,
+				orbitCenter.GetComponent<Rigidbody2D>().mass,
+				position
+			);
 			canister.GetComponent<HealCanister>().SetVelocity(Vector2.Perpendicular(radiusVector * orbitDirection) * velocity);
 
 		}

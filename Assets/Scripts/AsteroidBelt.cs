@@ -7,6 +7,14 @@ public class AsteroidBelt : MonoBehaviour {
 	public uint spawnCount = 300;
 	[Tooltip("Minimum distance between the centerpoints of any two asteroids")]
 	public float minDistance = .1f;
+	public float minSize = .5f;
+	public float maxSize = 3f;
+	public float minRotateSpeed = .01f;
+	public float maxRotateSpeed = .1f;
+	public float minOrbitSpeed = 0.001f;
+	public float maxOrbitSpeed = 0.001f;
+	public float maxDamage = 50f;
+	public float maxMass = 300f;
 
 	public float spawnRangeWidth = 5f;
 	public Transform center;
@@ -81,18 +89,23 @@ public class AsteroidBelt : MonoBehaviour {
 					GameObject prefab = asteroids[prefabIndex];
 					float rotation = Random.Range(0f, Mathf.PI * 2);
 					var asteroid = Instantiate(prefab, position, Quaternion.AngleAxis(rotation, Vector3.forward), transform);
-					asteroid.GetComponent<PlanetController>().orbitCenter = center;
+					var scale = Random.value;
+					asteroid.transform.localScale = Vector3.one * Mathf.Lerp(minSize, maxSize, scale);
 
+					var controller = asteroid.GetComponent<PlanetController>();
+					controller.orbitCenter = center;
+					controller.orbitSpeed = Random.Range(minOrbitSpeed, maxOrbitSpeed);
+					controller.rotationSpeed = Random.Range(minRotateSpeed, maxRotateSpeed);
 
-					// Don't mind me, taking care of asteroid prefab randomization (Success case)
+					asteroid.GetComponent<Projectile>().damage = scale * scale * maxDamage; // 2x the size means 4x the area
+					asteroid.GetComponent<Rigidbody2D>().mass = scale * scale * maxMass; // same here
+
+					// Don't mind me, taking care of asteroid prefab randomization
 					prefabIndex = (prefabIndex + 1) % asteroids.Length;
 					continue;
 
 					// For invalid samples to break the check loop
-					invalidSpawnShortcut:
-						// Don't mind me, taking care of asteroid prefab randomization (Failed case)
-						prefabIndex = (prefabIndex + 1) % asteroids.Length;
-					break;
+					invalidSpawnShortcut : break;
 				}
 
 				asteroidsToSpawn--;

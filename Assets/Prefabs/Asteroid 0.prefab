@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 9032756641298490692}
   - component: {fileID: -3612689851055855999}
   - component: {fileID: 9032756641298490695}
-  - component: {fileID: 9032756641298490693}
   - component: {fileID: -5642336299234077213}
+  - component: {fileID: -4654686941989217361}
   m_Layer: 0
-  m_Name: Asteroid
+  m_Name: Asteroid 0
   m_TagString: Celestial
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,8 +74,9 @@ SpriteRenderer:
   m_SortingLayerID: -1978258441
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6b0a416c67c5ea544b5c7a19c1aa8643, type: 3}
-  m_Color: {r: 0.39, g: 0.39, b: 0.39, a: 1}
+  m_Sprite: {fileID: -2244543243340742949, guid: e573ac8dd8477a04c930ac87e8be2a56,
+    type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -121,22 +122,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.4
---- !u!114 &9032756641298490693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9032756641298490715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32a98041a981caa46bb3b4758b39e907, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  orbitCenter: {fileID: 0}
-  orbitSpeed: 0.025
-  rotationSpeed: 2
+  m_Radius: 0.27
 --- !u!114 &-5642336299234077213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,3 +140,18 @@ MonoBehaviour:
   mass: 1
   sender: {fileID: 0}
   lifetime: 0
+--- !u!114 &-4654686941989217361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9032756641298490715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32a98041a981caa46bb3b4758b39e907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orbitCenter: {fileID: 0}
+  orbitSpeed: 10
+  rotationSpeed: 10
