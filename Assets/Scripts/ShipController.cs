@@ -56,7 +56,7 @@ public class ShipController : MonoBehaviour {
 			// Unity uses degrees for transforms; In Mathf.Atan2, 0deg = Right
 			desiredRotation = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg - 90f;
 		}
-		rigidbody.rotation = Mathf.SmoothDampAngle(rigidbody.rotation, desiredRotation, ref steerVelocity, steerDampTime / inputWeight, float.MaxValue * inputWeight);
+		rigidbody.rotation = Mathf.SmoothDampAngle(rigidbody.rotation, desiredRotation, ref steerVelocity, steerDampTime / inputWeight, float.MaxValue * inputWeight, Time.deltaTime);
 
 		var movement = input * moveSpeed * inputWeight * Time.deltaTime;
 		// Sin and Cos are switched since Unity rotations face up when zero, in trigonometry, they face right when zero

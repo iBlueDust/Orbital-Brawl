@@ -23,7 +23,7 @@ public class CameraController : MonoBehaviour {
 	}
 
 
-	private void FixedUpdate() {
+	private void LateUpdate() {
 		Move();
 		Zoom();
 	}
@@ -32,7 +32,7 @@ public class CameraController : MonoBehaviour {
 	private void Move() {
 		FindAveragePosition();
 
-		transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref moveVelocity, dampTime);
+		transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref moveVelocity, dampTime, float.PositiveInfinity, Time.deltaTime);
 	}
 
 
