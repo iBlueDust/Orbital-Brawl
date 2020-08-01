@@ -7,6 +7,9 @@ TagManager:
   - Celestial
   - Projectile
   - Pickable
+  - P1 Spawn
+  - P2 Spawn
+  - Spawn Area
   layers:
   - Default
   - TransparentFX

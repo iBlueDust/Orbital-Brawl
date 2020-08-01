@@ -207,7 +207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2f24f39baeef74aadd12b034a9ca99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
+  damage: 10
   maxLifetime: 60
   mass: 0.25
   sender: {fileID: 0}
