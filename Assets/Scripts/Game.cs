@@ -17,8 +17,11 @@ public enum GameState {
 
 public class Game : MonoBehaviour {
 	public static GameState state {
-		get => instance._state;
+		get => instance?._state ?? GameState.Menu;
 		set {
+			if (instance == null)
+				return;
+
 			instance._state = value;
 			instance.onStateChange(instance._state);
 		}
