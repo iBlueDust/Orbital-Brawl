@@ -1,6 +1,6 @@
-Itch.io Page
+[X] Itch.io Page
 
-Main Menu (Cancelled)
-Continuous Shooting for low health (Cancelled)
-Out of Bounds barrier (Cancelled)
-HUD (Cancelled)
+[ ] Main Menu
+[ ] Continuous Shooting for low health
+[ ] Out of Bounds barrier
+[ ] HUD
